@@ -1,0 +1,16 @@
+name: 'sumup_project'
+version: '1.0'
+config-version: 2
+
+profile: 'default'  # Asegúrate de que esto coincida con el perfil en profiles.yml
+
+# Directories
+model-paths: ["models"]
+target-path: "target"
+clean-targets: ["target"]
+
+# models configurations
+models:
+  sumup_project:
+    marts:
+      +materialized: table

@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: SumUpTest1
+      MYSQL_USER: dbt_user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  dbt:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      /bin/bash -c "
+      while ! nc -z db 3306; do
+        echo 'Waiting for MySQL to start...'
+        sleep 1
+      done;
+      echo 'MySQL started';
+      cd /app/dbt_project && 
+      python /app/scripts/load_data.py && 
+      dbt run --profiles-dir /app/dbt_project --project-dir /app/dbt_project
+      "
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+
+volumes:
+  db_data:

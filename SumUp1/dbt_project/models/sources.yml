@@ -1,0 +1,12 @@
+version: 2
+sources:
+  - name: sumup_source
+    schema: SumUpTest1
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+    tables:
+      - name: transactions
+      - name: devices
+      - name: stores

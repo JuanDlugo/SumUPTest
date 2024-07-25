@@ -1,0 +1,10 @@
+default:
+  target: dev
+  outputs:
+    dev:
+      type: mysql
+      host: db
+      user: dbt_user
+      password: password
+      port: 3306
+      schema: SumUpTest1
