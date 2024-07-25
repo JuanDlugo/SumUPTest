@@ -15,11 +15,26 @@ cd SUMUP3
 
 ### 2. Construir la imagen de Docker
 
-docker build -t elt-project .
+Este comando creará la imagen de docker y la ejecutará. En la terminal se podrán ver las respuestas 
+solicitadas en el test.\
 
-### 3. Ejecutar el contenedor de Docker
+docker-compose up --build
 
-docker run elt-project
+
+### 3. Acceder al contenedor y verificar la base de datos SQLite
+Para acceder al contenedor y verificar la base de datos, sigue los siguientes pasos:
+
+
+docker exec -it elt-project /bin/bash
+
+
+### 4. Consultar los datos en la base de datos
+Dentro de la interfaz ejecutar:
+
+
+sqlite3 /app/data/database.db\
+.tables\
+SELECT * FROM uf_values;
 
 ### Resultados esperados
 Después de ejecutar el contenedor, deberías ver los siguientes resultados en la consola:

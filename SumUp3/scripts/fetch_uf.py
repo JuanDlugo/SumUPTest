@@ -61,18 +61,23 @@ def fetch_and_store_uf():
     # Convertir los valores de UF a float
     df_uf_values = df_uf_values.apply(pd.to_numeric, errors='coerce')
 
+    # Transponer el DataFrame para tener una columna de fechas y una columna de valores
+    df_uf_values = df_uf_values.transpose().reset_index()
+    df_uf_values.columns = ['fecha', 'valor']
+
     # Guardar los datos en una base de datos usando SQLAlchemy
     engine = create_engine('sqlite:////app/data/database.db')
     df_uf_values.to_sql('uf_values', con=engine, if_exists='replace', index=False)
-    
 
     # Obtener la fecha y el valor de la UF de hoy
     today = datetime.today().strftime('%d.%b.%Y')
-    if today in df_uf_values.columns:
-        uf_today = df_uf_values[today].values[0]
+    uf_today_row = df_uf_values[df_uf_values['fecha'] == today]
+    if not uf_today_row.empty:
+        uf_today = uf_today_row['valor'].values[0]
         print(f"La UF de hoy ({today}) es {uf_today}")
     else:
         print(f"No se encontró la UF para la fecha de hoy ({today})")
 
     # Imprimir la última fecha guardada
-    print(f"Se guardó en la BDD la UF hasta el día {df_uf_values.columns[-1]}")
+    print(f"Se guardó en la BDD la UF hasta el día {df_uf_values['fecha'].iloc[-1]}")
+
